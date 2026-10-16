@@ -1,62 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Exercice 2</title>
-
-    <!-- Lien vers le fichier CSS -->
     <link rel="stylesheet" type="text/css" href="style.css" />
-
-    <!-- Lien vers le fichier JavaScript -->
     <script src="script.js" defer></script>
 </head>
 
-<body onload="chargerZoneItem()">
-
-    <div id="entete">
-        <h1>Zone d'entête</h1>
-
-        <div id="panier">
-            Nbre item : <span id="idItem">0</span>
-        </div>
-    </div>
-
-    <div id="zoneContenuItem">
-    </div>
-
-    <div id="zoneContenuFacture" style="display: none;">
-        <table border="1" width="50%" align="center">
-
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Quantité</th>
-                    <th>Prix unitaire</th>
-                </tr>
-            </thead>
-
-            <tbody id="corpsTableau">
-            </tbody>
-
-            <tfoot>
-                <tr>
-                    <td colspan="2">Sous-total HT</td>
-                    <td id="idSousTotal">0.00 DT</td>
-                </tr>
-
-                <tr>
-                    <td colspan="2">TVA (19 %)</td>
-                    <td id="idTVA">0.00 DT</td>
-                </tr>
-
-                <tr>
-                    <td colspan="2">Total TTC</td>
-                    <td id="idTotal">0.00 DT</td>
-                </tr>
-            </tfoot>
-
-        </table>
-    </div>
-
+<body>
+    <main id="app"></main>
 </body>
+
 </html>

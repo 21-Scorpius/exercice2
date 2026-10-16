@@ -1,36 +1,104 @@
-var listeProduit = [];
-var panier = new Array();
 const TAUX_TVA = 0.19;
+let listeProduit = [];
+const panier = [];
+let elements;
 
-// Charger les produits depuis produits.json
-/*function chargerZoneItem() {
-    const xhr = new XMLHttpRequest();
-    const url = "produits.json";
-    xhr.open("GET", url, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                var reponse = xhr.responseText;
-                var objJSON = JSON.parse(reponse);
-                listeProduit = objJSON.liste;
-                afficherListeProduits();
-            } else {
-                alert(
-                    "Erreur lors de la récupération des données (Status "+ xhr.status + ")"
-                );
-            }
-        }
+function creerElement(nom, options = {}) {
+    const element = document.createElement(nom);
+
+    if (options.id) {
+        element.id = options.id;
+    }
+    if (options.className) {
+        element.className = options.className;
+    }
+    if (options.text !== undefined) {
+        element.textContent = options.text;
+    }
+
+    return element;
+}
+
+function creerLigneTotal(libelle, idValeur) {
+    const ligne = creerElement("tr");
+    const celluleLibelle = creerElement("td", { text: libelle });
+    celluleLibelle.colSpan = 2;
+    ligne.append(
+        celluleLibelle,
+        creerElement("td", { id: idValeur, text: "0.00 DT" })
+    );
+    return ligne;
+}
+
+function creerInterface() {
+    const racine = document.getElementById("app");
+    const entete = creerElement("header", { id: "entete" });
+    const titre = creerElement("h1", { text: "Zone d'entête" });
+    const boutonPanier = creerElement("button", { id: "panier" });
+    boutonPanier.type = "button";
+    boutonPanier.append(
+        document.createTextNode("Nbre item : "),
+        creerElement("span", { id: "idItem", text: "0" })
+    );
+    entete.append(titre, boutonPanier);
+
+    const zoneProduits = creerElement("section", {
+        id: "zoneContenuItem",
+        className: "vue"
+    });
+
+    const zoneFacture = creerElement("section", {
+        id: "zoneContenuFacture",
+        className: "vue"
+    });
+    zoneFacture.hidden = true;
+
+    const tableau = creerElement("table", { id: "tableauFacture" });
+    const enteteTableau = creerElement("thead");
+    const ligneEntete = creerElement("tr");
+    ["Description", "Quantité", "Prix unitaire"].forEach(function (titreColonne) {
+        const cellule = creerElement("th", { text: titreColonne });
+        cellule.scope = "col";
+        ligneEntete.appendChild(cellule);
+    });
+    enteteTableau.appendChild(ligneEntete);
+
+    const corpsTableau = creerElement("tbody", { id: "corpsTableau" });
+    const piedTableau = creerElement("tfoot");
+    piedTableau.append(
+        creerLigneTotal("Sous-total HT", "idSousTotal"),
+        creerLigneTotal("TVA (19 %)", "idTVA"),
+        creerLigneTotal("Total TTC", "idTotal")
+    );
+    tableau.append(enteteTableau, corpsTableau, piedTableau);
+
+    const boutonContinuer = creerElement("button", {
+        id: "continuerAchats",
+        text: "Continue Shopping"
+    });
+    boutonContinuer.type = "button";
+    zoneFacture.append(tableau, boutonContinuer);
+    racine.replaceChildren(entete, zoneProduits, zoneFacture);
+
+    elements = {
+        zoneProduits: zoneProduits,
+        zoneFacture: zoneFacture,
+        corpsTableau: corpsTableau,
+        nombreArticles: document.getElementById("idItem"),
+        sousTotal: document.getElementById("idSousTotal"),
+        tva: document.getElementById("idTVA"),
+        total: document.getElementById("idTotal")
     };
-    xhr.send();
-}*/
 
+    boutonPanier.addEventListener("click", afficheFacture);
+    boutonContinuer.addEventListener("click", afficherProduits);
+}
 
-// Charger les produits depuis produits.json avec Async/Await
 async function chargerZoneItem() {
     try {
         const response = await fetch("produits.json");
-        if(!response.ok) {
-            throw new Error("Erreur  (Status " + response.status + ")");
+        if (!response.ok) {
+            throw new Error("Erreur lors de la récupération des données (Status " + response.status + ")");
         }
         const data = await response.json();
         listeProduit = data.liste;
@@ -40,131 +108,108 @@ async function chargerZoneItem() {
     }
 }
 
-// Afficher les produits
 function afficherListeProduits() {
-    var zone = document.getElementById("zoneContenuItem");
-    zone.innerHTML = "";
+    elements.zoneProduits.replaceChildren();
 
-    listeProduit.forEach(function (produit, index) {
-        var div = document.createElement("div");
-        div.className = "item";
+    listeProduit.forEach(function (produit) {
+        const article = creerElement("article", { className: "item" });
+        article.appendChild(creerElement("h3", { text: produit.description }));
 
-        div.innerHTML = `
-            <h3>${produit.description}</h3>
-            <img src="${produit.image}" alt="${produit.description}" width="150">
-            <p>${produit.details}</p>
-            <p>Prix : ${produit.prix} DT</p>
-        `;
+        const image = creerElement("img");
+        image.src = produit.image;
+        image.alt = produit.description;
+        image.width = 150;
+        article.appendChild(image);
 
-        var bouton = document.createElement("div");
-        bouton.className = "ajouter";
-        bouton.textContent = "Ajouter au panier";
+        article.appendChild(creerElement("p", { text: produit.details }));
+        article.appendChild(creerElement("p", {
+            text: "Prix : " + produit.prix + " DT"
+        }));
 
-        bouton.addEventListener("click", function () {
-            var ligneCommande = {produit : produit, quantite : "1"};
-            ajouterItem(ligneCommande);
+        const boutonAjouter = creerElement("button", {
+            className: "ajouter",
+            text: "Ajouter au panier"
+        });
+        boutonAjouter.type = "button";
+        boutonAjouter.addEventListener("click", function () {
+            ajouterItem({ produit: produit, quantite: 1 });
         });
 
-        div.appendChild(bouton);
-        zone.appendChild(div);
+        article.appendChild(boutonAjouter);
+        elements.zoneProduits.appendChild(article);
     });
 }
 
-function ajouterItem(ligneCommande){
+function ajouterItem(ligneCommande) {
     panier.push(ligneCommande);
-    var quantite = ligneCommande.quantite;
-    var nbitempannier = document.getElementById("idItem").innerHTML;
-    nbitempannier = parseInt(nbitempannier) + parseInt(quantite);
-    document.getElementById("idItem").innerHTML = nbitempannier;
+    mettreAJourNombreArticles();
 }
 
-// Afficher la facture
+function mettreAJourNombreArticles() {
+    const nombre = panier.reduce(function (total, ligne) {
+        return total + Number(ligne.quantite);
+    }, 0);
+    elements.nombreArticles.textContent = nombre;
+}
+
+function afficherProduits() {
+    elements.zoneFacture.hidden = true;
+    elements.zoneProduits.hidden = false;
+}
+
 function afficheFacture() {
-    document.getElementById("zoneContenuItem").style.display = "none";
+    elements.zoneProduits.hidden = true;
+    elements.zoneFacture.hidden = false;
+    elements.corpsTableau.replaceChildren();
 
-    document.getElementById("zoneContenuFacture").style.display = "block";
-    document.getElementById("zoneContenuFacture").style.height = "85%";
+    let sousTotal = 0;
 
-    var sousTotal = 0;
-
-    var noeudTBody = document.querySelector("#corpsTableau");
-    noeudTBody.innerHTML = "";
-
-    panier.forEach(function(ligneCommande, index) {
-        var nomDeProduit = ligneCommande.produit.description;
-        var quantite = parseInt(ligneCommande.quantite);
-        var prix = parseFloat(ligneCommande.produit.prix);
-
+    panier.forEach(function (ligneCommande, index) {
+        const prix = Number(ligneCommande.produit.prix);
+        const quantite = Number(ligneCommande.quantite);
         sousTotal += quantite * prix;
 
-        var noeudTr = document.createElement("tr");
+        const ligne = creerElement("tr");
+        ligne.appendChild(creerElement("td", {
+            text: ligneCommande.produit.description
+        }));
 
-        // Description du produit
-        var noeudTd1 = document.createElement("td");
-        var contenuTd1 = document.createTextNode(nomDeProduit);
-
-        noeudTd1.appendChild(contenuTd1);
-        noeudTr.appendChild(noeudTd1);
-
-        // Quantité modifiable
-        var noeudTd2 = document.createElement("td");
-        var noeudInput = document.createElement("input");
-
-        noeudInput.setAttribute("type", "number");
-        noeudInput.setAttribute("min", "1");
-        noeudInput.setAttribute("value", quantite);
-
-        noeudInput.addEventListener("change", function() {
-            var nouvelleQte = parseInt(this.value);
-
-            if (!Number.isInteger(nouvelleQte) || nouvelleQte < 1) {
-                this.value = panier[index].quantite;
+        const celluleQuantite = creerElement("td");
+        const saisieQuantite = creerElement("input");
+        saisieQuantite.type = "number";
+        saisieQuantite.min = "1";
+        saisieQuantite.value = quantite;
+        saisieQuantite.setAttribute(
+            "aria-label",
+            "Quantité pour " + ligneCommande.produit.description
+        );
+        saisieQuantite.addEventListener("change", function () {
+            const nouvelleQuantite = Number(saisieQuantite.value);
+            if (!Number.isInteger(nouvelleQuantite) || nouvelleQuantite < 1) {
+                saisieQuantite.value = ligneCommande.quantite;
                 return;
             }
 
-            panier[index].quantite = nouvelleQte.toString();
-
-            // Mettre à jour le nombre total d'articles
-            var nbArticles = 0;
-
-            panier.forEach(function(article) {
-                nbArticles += parseInt(article.quantite);
-            });
-
-            document.getElementById("idItem").innerHTML = nbArticles;
-
-            // Recalculer la facture
+            ligneCommande.quantite = nouvelleQuantite;
+            mettreAJourNombreArticles();
             afficheFacture();
         });
+        celluleQuantite.appendChild(saisieQuantite);
+        ligne.appendChild(celluleQuantite);
 
-        noeudTd2.appendChild(noeudInput);
-        noeudTr.appendChild(noeudTd2);
-
-        // Prix unitaire
-        var noeudTd3 = document.createElement("td");
-        var contenuTd3 = document.createTextNode(prix.toFixed(2) + " DT");
-
-        noeudTd3.appendChild(contenuTd3);
-        noeudTr.appendChild(noeudTd3);
-
-        noeudTBody.appendChild(noeudTr);
+        ligne.appendChild(creerElement("td", {
+            text: prix.toFixed(2) + " DT"
+        }));
+        elements.corpsTableau.appendChild(ligne);
     });
 
-    // Calcul de la TVA et du total TTC
-    var totalTVA = sousTotal * TAUX_TVA;
-    var total = sousTotal + totalTVA;
-
-    document.getElementById("idSousTotal").innerHTML =sousTotal.toFixed(2) + " DT";
-
-    document.getElementById("idTVA").innerHTML = totalTVA.toFixed(2) + " DT";
-
-    document.getElementById("idTotal").innerHTML =total.toFixed(2) + " DT";
+    const totalTVA = sousTotal * TAUX_TVA;
+    elements.sousTotal.textContent = sousTotal.toFixed(2) + " DT";
+    elements.tva.textContent = totalTVA.toFixed(2) + " DT";
+    elements.total.textContent = (sousTotal + totalTVA).toFixed(2) + " DT";
 }
 
-
-// Afficher la facture lors du clic sur le panier
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("panier").addEventListener("click", function() {
-        afficheFacture();
-    });
+document.addEventListener("DOMContentLoaded", function () {
+    creerInterface();
+    chargerZoneItem();
 });
