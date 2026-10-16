@@ -1,0 +1,83 @@
+#entete{
+background-color : red;
+width : 100%;
+height : 170px;
+position : absolute;
+left: 0px;
+top : 0px;
+}
+
+#zoneContenuItem{
+background-color : #dedede;
+width: 100%;
+height : 500px;
+position : absolute;
+top : 170px;
+left : 0px;
+}
+
+
+#zoneContenuFacture {
+background-color : #dedede;
+width : 100%;
+height: 100%;
+position : absolute;
+top: 170px;
+left : 0px;
+padding-top : 50px;
+display : none;
+}
+
+#entete h1{
+font-family: arial;
+font-size : 50px;
+color : white;
+text-align : center;
+position : relative;
+top : 50px;
+}
+
+#panier{
+background-color : blue;
+width : 120px;
+font-family: arial;
+font-size : 16px;
+padding: 10px;
+text-align : center;
+color: white;
+font-weight: bold;
+float : right;
+position : relative;
+top: -120px;
+}
+
+#idItem {
+color : red;
+font-size : 18px;
+}
+
+.item{
+font-size : 16px;
+font-family : arial;
+text-align : center;
+color: rgb(99, 23, 27);
+width : 20%;
+margin-left : 4%;
+padding-top : 30px;
+display: inline-block;
+}
+
+.ajouter{
+background-color : red;
+width : 50%;
+height : 30px;
+padding-top : 10px;
+font-weight : bold;
+margin-left : 25%;
+margin-top : 10px;
+}
+	body {
+				background-color: #dedede;
+				margin: 0;
+				padding: 0;
+			}

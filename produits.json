@@ -1,0 +1,76 @@
+{
+	"liste" : [
+		{
+			"description" : "HP portatif",
+			"image" : "portable1.jpg",
+			"prix" : 350.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "Portatif Macbook Pro MF839LA",
+			"image" : "portable2.jpg",
+			"prix" : 1549.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "Portatif Macbook Air MJVE2C",
+			"image" : "portable3.jpg",
+			"prix" : 1990.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "MSI Portatif de jeu Leopard",
+			"image" : "portable4.jpg",
+			"prix" : 1099.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "HP portatif 001",
+			"image" : "portable1.jpg",
+			"prix" : 350.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "Portatif Macbook Pro MF839LA 001",
+			"image" : "portable2.jpg",
+			"prix" : 1549.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "Portatif Macbook Air MJVE2C 001",
+			"image" : "portable3.jpg",
+			"prix" : 1990.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "MSI Portatif de jeu Leopard 001",
+			"image" : "portable4.jpg",
+			"prix" : 1099.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "HP portatif 002",
+			"image" : "portable1.jpg",
+			"prix" : 350.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "Portatif Macbook Pro MF839LA 002",
+			"image" : "portable2.jpg",
+			"prix" : 1549.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "Portatif Macbook Air MJVE2C 002",
+			"image" : "portable3.jpg",
+			"prix" : 1990.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		},
+		{
+			"description" : "MSI Portatif de jeu Leopard 002",
+			"image" : "portable4.jpg",
+			"prix" : 1099.95,
+			"details" : "MSI 15.6 po GF65 9SEXR-436p, Intel Core i7-9750H, 16GB RAM, 512GB SSD, Win10, Noir"
+		}
+	]
+}
